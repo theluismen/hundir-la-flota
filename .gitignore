@@ -1,0 +1,3 @@
+# Ignorar archivos objeto y el programa ejecutable
+/obj/*.o
+/bin/*.out
