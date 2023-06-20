@@ -4,10 +4,12 @@
 #include "tipos.h"
 #include "defines.h"
 
+/* Iniciar numeros aleatorios*/
 void randomize ( void ) {
     srand(time(NULL));
 }
 
+/* Inicializar parametros del juego; valores por defecto, caracteres en el tablero y todo eso */
 void juego_init ( struct Juego * juego ) {
     short int i, j;
 
@@ -22,11 +24,13 @@ void juego_init ( struct Juego * juego ) {
     }
 }
 
+/* Acabar juego. Basicamente para hacer el free() */
 void juego_fin ( struct Juego * juego ) {
     /* Liberar memoria reservada para el tablero del juego */
     free(juego->tablero);
 }
 
+/* Mostrar tablero */
 void tablero_mostrar ( struct Juego * juego ) {
     short int i, j;
     printf("  ");
