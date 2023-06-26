@@ -15,11 +15,11 @@ void juego_init ( struct Juego * juego ) {
 
     juego->no_barcos_hundidos = 0;
     /* Asignar memoria para el tablero */
-    juego->tablero = malloc( TAM_TABLERO * TAM_TABLERO * sizeof(char) );
+    juego->tablero = malloc( TAM_TABLERO * TAM_TABLERO * sizeof( bool ) );
     /* Inicializar Tablero con caracteres vacios */
     for ( i = 0; i < TAM_TABLERO; i++) {
         for ( j = 0; j < TAM_TABLERO; j++) {
-            juego->tablero[ i * TAM_TABLERO + j ] = DEF_CHAR;
+            juego->tablero[ i * TAM_TABLERO + j ] = false;
         }
     }
 }
@@ -33,15 +33,18 @@ void juego_fin ( struct Juego * juego ) {
 /* Mostrar tablero */
 void tablero_mostrar ( struct Juego * juego ) {
     short int i, j;
+
+    /* */
     printf("  ");
     for ( i = 0; i < TAM_TABLERO; i++ ) {
         printf("%d ", i);
     }
+
     printf("\n");
     for ( i = 0; i < TAM_TABLERO; i++ ) {
         printf("%d|", i);
         for ( j = 0; j < TAM_TABLERO; j++) {
-            printf("%c ", juego->tablero[ i * TAM_TABLERO + j ]);
+            ( juego->tablero[ i * TAM_TABLERO + j ] == true ) ? printf("%c ", SHIP_CHAR) : printf("  ");
         }
         printf("|\n");
     }

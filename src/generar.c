@@ -102,7 +102,7 @@ bool barco_colocable ( struct Juego * juego, struct Barco * barco ) {
     /* Comprovar el AREA. Se trata de BUSCAR un caracter diferente a el que indica un barco o trozo de este */
     for ( i = fila_ini ; i <= fila_end && colocable ; i++ ) {
         for ( j = col_ini ; j <= col_end && colocable ; j++ ) {
-            colocable = juego->tablero[i * TAM_TABLERO + j] != '#';
+            colocable = ! juego->tablero[i * TAM_TABLERO + j];
         }
     }
 
@@ -116,9 +116,9 @@ void barco_colocar ( struct Juego * juego, struct Barco * barco ) {
     aux = 0;
     for ( i = 0; i < barco->longt; i++) {
         if ( abs(barco->dir) == 1 ) {
-            juego->tablero[barco->y * TAM_TABLERO + barco->x + aux] = '#';
+            juego->tablero[barco->y * TAM_TABLERO + barco->x + aux] = true;
         } else {
-            juego->tablero[(barco->y + aux)*TAM_TABLERO + barco->x] = '#';
+            juego->tablero[(barco->y + aux)*TAM_TABLERO + barco->x] = true;
         }
         aux = (barco->dir > 0 ) ? aux+1 : aux-1;
     }

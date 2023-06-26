@@ -1,8 +1,13 @@
 #include <stdbool.h>
 
+// struct Casilla {
+//     bool ocupado;
+//     bool tocado;
+// };
+
 struct Juego {
     short int no_barcos_hundidos;  // Nº de barcos Hundidos
-    char * tablero;                // Puntero del tablero donde habra los barcos
+    bool * tablero;                // Puntero del tablero donde habra los barcos
 };
 
 struct Barco {

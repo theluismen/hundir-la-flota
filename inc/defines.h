@@ -7,4 +7,5 @@
 #define DIR_VB -2           //Dirección Vertical   Backward
 
 // #define DEF_CHAR '~'
-#define DEF_CHAR ' '
+#define DEF_CHAR    ' '
+#define SHIP_CHAR   '#'
