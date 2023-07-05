@@ -1,13 +1,10 @@
-#include <stdbool.h>
-
-// struct Casilla {
-//     bool ocupado;
-//     bool tocado;
-// };
+/* TIPO Casilla_t: sirve para definir el tablero como tabla (puntero) de este struct */
+typedef unsigned char Casilla_t;
 
 struct Juego {
     short int no_barcos_hundidos;  // Nº de barcos Hundidos
-    bool * tablero;                // Puntero del tablero donde habra los barcos
+    Casilla_t * tablero;           // Puntero del tablero donde habra los barcos
+    struct Barco * barcos;         // Guardar barcos colocados despues de la f generar_barcos()
 };
 
 struct Barco {
@@ -15,5 +12,4 @@ struct Barco {
     short int y;                   // Coord Y
     short int dir;                 // Dirección de Barco
     short int longt;               // Longitud de Barco
-    bool colocable;                // Si el barco es COLOCABLE
-};                                 //  que sea colocable implica que previamente CABE
+};

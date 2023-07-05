@@ -29,7 +29,6 @@ void barco_init_coord ( struct Barco * barco ) {
     barco->y         = rand() % TAM_TABLERO;
     barco->dir       = rand() % 2 + 1;
     barco->dir       = (rand() % 2 == 0) ? -barco->dir : barco->dir;
-    barco->colocable = false;
 }
 
 /* Funcion que devuelve true/false si el barco cabe o no en el tablero.
@@ -61,11 +60,14 @@ bool barco_colocable ( struct Juego * juego, struct Barco * barco ) {
 
     /* Delimitar AREA de region que ocupa barco */
     /*  NOTA - Es posible que cierta parte de la region se salga del tablero */
-    if ( abs(barco->dir) == 1 ) {
-        fila_ini = barco->y - 1;
+    fila_ini = barco->y - 1;
+    col_ini = barco->x - 1;
+
+    if ( abs(barco->dir) == DIR_HO ) {
+        // fila_ini = barco->y - 1;
         fila_end = barco->y + 1;
 
-        col_ini = barco->x - 1;
+        // col_ini = barco->x - 1;
         col_end = barco->x + barco->longt;
 
         if ( barco->dir == DIR_HB ) {
@@ -73,10 +75,10 @@ bool barco_colocable ( struct Juego * juego, struct Barco * barco ) {
             col_end = barco->x + 1;
         }
     } else {
-        fila_ini = barco->y - 1;
+        // fila_ini = barco->y - 1;
         fila_end = barco->y + barco->longt;
 
-        col_ini = barco->x - 1;
+        // col_ini = barco->x - 1;
         col_end = barco->x + 1;
 
         if ( barco->dir == DIR_VB ) {
@@ -102,25 +104,25 @@ bool barco_colocable ( struct Juego * juego, struct Barco * barco ) {
     /* Comprovar el AREA. Se trata de BUSCAR un caracter diferente a el que indica un barco o trozo de este */
     for ( i = fila_ini ; i <= fila_end && colocable ; i++ ) {
         for ( j = col_ini ; j <= col_end && colocable ; j++ ) {
-            colocable = ! juego->tablero[i * TAM_TABLERO + j];
+            colocable = juego->tablero[i * TAM_TABLERO + j] == CASILLA_VACIA;
         }
     }
 
     return colocable;
 }
 
-/* Dibuja o coloca el barco en el juego->tablero. SE ASUME QUE SE PUEDE COLOCAR.*/
-void barco_colocar ( struct Juego * juego, struct Barco * barco ) {
+/* Dibuja o coloca el barco en el juego->tablero con el caracter especificado. SE ASUME QUE SE PUEDE COLOCAR.*/
+void barco_colocar_con ( struct Juego * juego, struct Barco * barco, char casilla ) {
     int i, aux;
 
     aux = 0;
     for ( i = 0; i < barco->longt; i++) {
-        if ( abs(barco->dir) == 1 ) {
-            juego->tablero[barco->y * TAM_TABLERO + barco->x + aux] = true;
+        if ( abs(barco->dir) == DIR_HO ) {
+            juego->tablero[barco->y * TAM_TABLERO + barco->x + aux] = casilla;
         } else {
-            juego->tablero[(barco->y + aux)*TAM_TABLERO + barco->x] = true;
+            juego->tablero[(barco->y + aux)*TAM_TABLERO + barco->x] = casilla;
         }
-        aux = (barco->dir > 0 ) ? aux+1 : aux-1;
+        aux = ( barco->dir > 0 ) ? aux+1 : aux-1;
     }
 }
 
@@ -129,7 +131,7 @@ void barco_colocar ( struct Juego * juego, struct Barco * barco ) {
 */
 void generar_barcos ( struct Juego * juego ) {
     int barco_index;
-
+    bool colocable;
     /* Cada iteracion del for finalmente coloca un barco*/
     for ( barco_index = 0; barco_index < NO_BARCOS; barco_index++ ) {
         struct Barco barco;                         // Declarar un struct tipo Barco
@@ -139,11 +141,15 @@ void generar_barcos ( struct Juego * juego ) {
         do {
             barco_init_coord( &barco );             // Escoger coordenadas y dirección aleatorias
             if ( barco_cabe( &barco ) )
-                barco.colocable = barco_colocable( juego, &barco );
-
-        } while ( ! barco.colocable );
+                colocable = barco_colocable( juego, &barco );
+        } while ( ! colocable );
 
         /* Finalmente colocar el barco */
-        barco_colocar( juego, &barco );
+        barco_colocar_con( juego, &barco, CASILLA_OCUPADA );
+        /* y guardar sus datos en el juego*/
+        juego->barcos[ barco_index ].x = barco.x;
+        juego->barcos[ barco_index ].y = barco.y;
+        juego->barcos[ barco_index ].dir = barco.dir;
+        juego->barcos[ barco_index ].longt = barco.longt;
     }
 }

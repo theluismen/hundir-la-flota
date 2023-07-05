@@ -9,7 +9,7 @@ TARGET 	:= ./bin/hundir-la-flota.out
 
 ## CREAR EJECUTABLE ##
 $(TARGET): $(OBJS)
-	@ echo "[+] - ENLAZANDO EJECUTABLE $<"
+	@ echo "[+] - ENLAZANDO EJECUTABLE $@"
 	@ $(CC) $(OBJS) -o $(TARGET)
 
 ## COMPILAR LOS ARCHIVOS FUENTE ##
@@ -17,9 +17,12 @@ $(TARGET): $(OBJS)
 	@ echo "[+] - COMPILANDO ARCHIVO FUENTE $<"
 	@ $(CC) $(CCFLAGS) -I$(INCDIR) -c $< -o $@
 
+## LIMPIAR DIRECTORIO DE ARCHIVOS OBJETO Y EL EJECUTABLE  ##
 clean:
 	@ rm -vf ./obj/*.o $(TARGET)
 
+## EJECUTAR EL PROGRAMA ##
 run: $(TARGET)
-	@ echo "[+] - EJECUTANDO PROGRAMA $<"
+	@ echo "[+] - EJECUTANDO PROGRAMA $(TARGET)"
+	@ echo
 	@ ./$(TARGET)
