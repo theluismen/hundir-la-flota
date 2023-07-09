@@ -12,11 +12,13 @@
 /* Distintos caracteres a mostrar en la funcion void tablero_mostrar() */
 #define CHAR_VACIO   ' '
 #define CHAR_OCUPADO '#'
+#define CHAR_AGUA    '~'
 #define CHAR_TOCADO  'X'
 #define CHAR_HUNDIDO 'H'
 
 /* Estados de as casillas de tipo Casilla_t de juego->tablero */
 #define CASILLA_VACIA   0
 #define CASILLA_OCUPADA 1
-#define CASILLA_TOCADA  2
-#define CASILLA_HUNDIDA 3
+#define CASILLA_AGUA    2
+#define CASILLA_TOCADA  3
+#define CASILLA_HUNDIDA 4

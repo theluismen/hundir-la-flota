@@ -51,7 +51,8 @@ void tablero_mostrar ( struct Juego * juego ) {
         for ( j = 0; j < TAM_TABLERO; j++) {
             switch ( juego->tablero[ i * TAM_TABLERO + j ] ) {
                 case CASILLA_VACIA   : caracter = CHAR_VACIO;   break;
-                case CASILLA_OCUPADA : caracter = CHAR_OCUPADO; break;
+                // case CASILLA_OCUPADA : caracter = CHAR_OCUPADO; break;
+                case CASILLA_AGUA    : caracter = CHAR_AGUA;    break;
                 case CASILLA_TOCADA  : caracter = CHAR_TOCADO;  break;
                 case CASILLA_HUNDIDA : caracter = CHAR_HUNDIDO; break;
             }
@@ -68,24 +69,26 @@ bool juego_acabado ( struct Juego * juego ) {
 
 /* Pide las coordenadas de la jugada y actualiza el tablero si adivina la casilla */
 void hacer_jugada ( struct Juego * juego ) {
-    short int x, y;
-    bool formato_ok = true;
+    unsigned short int y, x, assig = 2;
+    char jugada[3+1];           // 3 chars + \0
 
     /* Pedir las coordenadas del usuario HASTA que sean correctas */
     do {
-        if ( ! formato_ok ) {
-            printf("ERROR: Formato Invalido\n");
+        if ( assig != 2 ) {
+            printf("ERROR: No se han recogido los datos correctamente\n");
         }
-        printf("Coord (N,N): ");
-        scanf("%hd,%hd", &y, &x);
-        formato_ok = ( x >= 0 && x < TAM_TABLERO && y >= 0 && y < TAM_TABLERO );
-    } while ( ! formato_ok );
+        printf("Coord (Y,X): ");
+        scanf("%3s", jugada);
+        fflush(stdin);
+        assig = sscanf(jugada, "%1hu,%1hu", &y, &x);
+    } while ( assig != 2 );
 
     /* Pasar de CASILLA_OCUPADA a CASILLA_TOCADA si el usuario acierta*/
-    if ( juego->tablero[ y * TAM_TABLERO + x ] == CASILLA_OCUPADA ) {
+    if ( juego->tablero[ y * TAM_TABLERO + x ] == CASILLA_VACIA ) {
+        juego->tablero[ y * TAM_TABLERO + x ] = CASILLA_AGUA;
+    } else if ( juego->tablero[ y * TAM_TABLERO + x ] == CASILLA_OCUPADA ) {
         juego->tablero[ y * TAM_TABLERO + x ] = CASILLA_TOCADA;
     }
-
 }
 
 bool barco_hundido ( struct Juego * juego, struct Barco * barco ) {
